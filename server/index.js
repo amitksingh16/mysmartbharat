@@ -3,6 +3,11 @@ import express from 'express';
 import Parser from 'rss-parser';
 import cors from 'cors';
 import NodeCache from 'node-cache';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3001;
@@ -57,6 +62,15 @@ app.get('/api/pib-updates', async (req, res) => {
             debug_error: error.message
         });
     }
+});
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 app.listen(port, () => {
