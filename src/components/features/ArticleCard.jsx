@@ -3,6 +3,10 @@ import Card from '../common/Card';
 import { Calendar, CheckCircle } from 'lucide-react';
 
 const ArticleCard = ({ article }) => {
+    const link = article.link || article.url;
+    // Check if link is valid (not empty, not just hash)
+    const isValidLink = link && link !== '#' && link.trim() !== '';
+
     return (
         <Card className="article-card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <div style={{ marginBottom: '1rem' }}>
@@ -25,24 +29,44 @@ const ArticleCard = ({ article }) => {
                 </div>
                 <p style={{ color: 'var(--text-grey)', fontSize: '0.9rem', lineHeight: '1.6' }}>{article.summary}</p>
             </div>
-            <a
-                href={article.link || article.url || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn"
-                style={{
-                    marginTop: 'auto',
-                    padding: '0.5rem 1rem',
-                    border: '1px solid var(--primary)',
-                    color: 'var(--primary)',
-                    backgroundColor: 'transparent',
-                    alignSelf: 'flex-start',
-                    textDecoration: 'none',
-                    display: 'inline-block'
-                }}
-            >
-                Read More
-            </a>
+
+            {isValidLink ? (
+                <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn"
+                    style={{
+                        marginTop: 'auto',
+                        padding: '0.5rem 1rem',
+                        border: '1px solid var(--primary)',
+                        color: 'var(--primary)',
+                        backgroundColor: 'transparent',
+                        alignSelf: 'flex-start',
+                        textDecoration: 'none',
+                        display: 'inline-block'
+                    }}
+                >
+                    Read More
+                </a>
+            ) : (
+                <span
+                    className="btn disabled"
+                    style={{
+                        marginTop: 'auto',
+                        padding: '0.5rem 1rem',
+                        border: '1px solid #ccc',
+                        color: '#999',
+                        backgroundColor: 'transparent',
+                        alignSelf: 'flex-start',
+                        display: 'inline-block',
+                        cursor: 'not-allowed'
+                    }}
+                    title="Link unavailable"
+                >
+                    Read More
+                </span>
+            )}
         </Card>
     );
 };

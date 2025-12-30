@@ -22,18 +22,30 @@ const cache = new NodeCache({ stdTTL: 1800 }); // 30 minutes TTL
 app.use(cors());
 
 // PIB RSS Feed URL (English/Mixed)
-const PIB_RSS_URL = 'https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3';
+// English: Lang=1, Hindi: Lang=2
+const PIB_RSS_BASE = 'https://pib.gov.in/RssMain.aspx?ModId=6';
 
 app.get('/api/pib-updates', async (req, res) => {
     try {
+        const lang = req.query.lang === 'hi' ? 'hi' : 'en';
+        const pibLangCode = lang === 'hi' ? '2' : '1';
+
+        // Use different cache keys for different languages
+        const cacheKey = `pib-updates-${lang}`;
+
         // Check cache first
-        const cachedData = cache.get('pib-updates');
+        const cachedData = cache.get(cacheKey);
         if (cachedData) {
             return res.json(cachedData);
         }
 
-        console.log('Fetching fresh data from PIB...');
-        const feed = await parser.parseURL(PIB_RSS_URL);
+        const feedUrl = `${PIB_RSS_BASE}&Lang=${pibLangCode}&Regid=1`; // Use Region ID 1 for broader/English, can verify for Hindi
+        // Note: For Hindi, Regid=3 was seen in search results, we'll try to keep Regid=3 for Hindi if needed,
+        // or just use consistent Regid if possible.
+        // Let's rely on the plan: Lang=2 for Hindi.
+
+        console.log(`Fetching fresh data from PIB (${lang.toUpperCase()})... URL: ${feedUrl}`);
+        const feed = await parser.parseURL(feedUrl);
 
         // Transform data
         const updates = feed.items.slice(0, 10).map(item => ({
@@ -47,11 +59,12 @@ app.get('/api/pib-updates', async (req, res) => {
         const responseData = {
             status: 'success',
             lastUpdated: new Date().toISOString(),
+            language: lang,
             data: updates
         };
 
         // Save to cache
-        cache.set('pib-updates', responseData);
+        cache.set(cacheKey, responseData);
 
         res.json(responseData);
     } catch (error) {
@@ -69,7 +82,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 

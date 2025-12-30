@@ -10,14 +10,15 @@ import { fetchPibUpdates } from '../services/newsService';
 import ArticleCard from '../components/features/ArticleCard';
 
 const Home = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [updates, setUpdates] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadUpdates = async () => {
+            setLoading(true);
             try {
-                const data = await fetchPibUpdates();
+                const data = await fetchPibUpdates(i18n.language);
                 setUpdates(data.slice(0, 3)); // Show top 3 updates
             } catch (err) {
                 console.error(err);
@@ -26,7 +27,7 @@ const Home = () => {
             }
         };
         loadUpdates();
-    }, []);
+    }, [i18n.language]);
 
     return (
         <>

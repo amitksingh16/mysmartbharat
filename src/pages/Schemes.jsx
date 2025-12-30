@@ -6,7 +6,7 @@ import { Filter } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Schemes = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [typeFilter, setTypeFilter] = useState('All');
     const [sectorFilter, setSectorFilter] = useState('All');
     // State Filter: 'All India' is default
@@ -18,8 +18,11 @@ const Schemes = () => {
         const loadSchemes = async () => {
             try {
                 setLoading(true);
-                const data = await getSchemes('All');
-                setAllSchemes(data);
+                // Pass current language to service
+                const data = await getSchemes('All', i18n.language);
+                // If we get fewer schemes in Hindi (partial translation), it will show fewer cards.
+                // This is expected behavior for now as we only translated 5 items.
+                setAllSchemes(data || []);
             } catch (error) {
                 console.error("Failed to load schemes");
             } finally {
@@ -27,7 +30,7 @@ const Schemes = () => {
             }
         };
         loadSchemes();
-    }, []);
+    }, [i18n.language]); // Refetch when language changes
 
     // State for View Mode: 'initial' or 'all'
     const [viewMode, setViewMode] = useState('initial');

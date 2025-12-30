@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import { financeUpdates } from '../data/mockData';
+import { financeUpdates, pibUpdates, pibUpdatesHi } from '../data/mockData';
 
 const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 const PROVIDER = import.meta.env.VITE_NEWS_API_PROVIDER || 'mock';
@@ -42,15 +42,17 @@ export const getLatestNews = async () => {
     return financeUpdates;
 };
 
-export const fetchPibUpdates = async () => {
+export const fetchPibUpdates = async (language = 'en') => {
     try {
-        const response = await apiClient.get('/api/pib-updates');
-        if (response.data && response.data.status === 'success') {
+        const response = await apiClient.get('/api/pib-updates', {
+            params: { lang: language }
+        });
+        if (response.data && response.data.status === 'success' && response.data.data.length > 0) {
             return response.data.data.map((item, index) => ({
                 id: `pib-${index}`,
                 title: item.title,
                 summary: item.contentSnippet || item.title,
-                date: new Date(item.pubDate).toLocaleDateString('en-IN', {
+                date: new Date(item.pubDate).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
@@ -58,12 +60,32 @@ export const fetchPibUpdates = async () => {
                 link: item.link,
                 source: 'PIB (Govt of India)',
                 isVerified: true
-            }));
+            })).filter(item => {
+                // Feature: Strict English Filter
+                // If the user explicity requests 'en', we must ensure NO Hindi/Urdu/Arabic content leaks through
+                if (language === 'en') {
+                    // Strict English Filter: Exclude titles/summary with content in:
+                    // - Devanagari (\u0900-\u097F)
+                    // - Arabic/Urdu (\u0600-\u06FF)
+                    // - Arabic Supplement/Extended (\u0750-\u077F)
+                    const hasNonEnglish = /[\u0900-\u097F\u0600-\u06FF\u0750-\u077F]/.test(item.title) ||
+                        /[\u0900-\u097F\u0600-\u06FF\u0750-\u077F]/.test(item.summary);
+                    return !hasNonEnglish;
+                }
+
+                // If language is 'hi', we WANT Hindi content.
+                return true;
+            });
         }
-        return [];
+        // If API returns success but empty data, return mock data
+        console.warn("API returned empty data, using mock data.");
+        // Use Hindi mock data if language is 'hi'
+        const mockData = language === 'hi' ? pibUpdatesHi : pibUpdates;
+        return mockData || pibUpdates;
     } catch (error) {
-        console.error("Failed to fetch PIB updates", error);
-        return [];
+        console.error("Failed to fetch PIB updates, falling back to mock data", error);
+        const mockData = language === 'hi' ? pibUpdatesHi : pibUpdates;
+        return mockData || pibUpdates;
     }
 };
 

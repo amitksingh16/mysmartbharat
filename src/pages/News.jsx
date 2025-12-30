@@ -5,14 +5,16 @@ import ArticleCard from '../components/features/ArticleCard';
 import { useTranslation } from 'react-i18next';
 
 const News = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [news, setNews] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         const fetchNews = async () => {
+            setLoading(true);
             try {
-                const data = await fetchPibUpdates();
+                // Pass current language to service
+                const data = await fetchPibUpdates(i18n.language);
                 setNews(data);
             } catch (error) {
                 console.error("Failed to load news", error);
@@ -21,7 +23,7 @@ const News = () => {
             }
         };
         fetchNews();
-    }, []);
+    }, [i18n.language]); // Refetch when language changes
 
     return (
         <>

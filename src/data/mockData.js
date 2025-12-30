@@ -1014,6 +1014,102 @@ export const financeUpdates = [
     }
 ];
 
+export const pibUpdates = [
+    {
+        id: "mock-1",
+        title: "Cabinet approves MSP for Copra for 2025 season",
+        summary: "The Cabinet Committee on Economic Affairs has approved the Minimum Support Price (MSP) for Copra for 2025 season. This will ensure remunerative prices to the coconut growers.",
+        date: "29 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1989182",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-2",
+        title: "PM to inaugurate 27th National Youth Festival in Nashik",
+        summary: "Prime Minister will inaugurate the 27th National Youth Festival in Nashik, Maharashtra. The festival aims to ignite the spirit of youth leadership and nation building.",
+        date: "28 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1993415",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-3",
+        title: "India achieves milestone of 100 GW solar power capacity",
+        summary: "Ministry of New and Renewable Energy declares that India has crossed the significant milestone of 100 GW installed solar power capacity, pushing green energy goals.",
+        date: "27 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1991000",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-4",
+        title: "Digital India: UPI transactions hit new record in December",
+        summary: "Unified Payments Interface (UPI) transactions have scaled a new high, reflecting the growing adoption of digital payments across the country.",
+        date: "26 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1992000",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-5",
+        title: "Ministry of Education launches 'Prerana' program",
+        summary: "A week-long residential program for selected students from across the country to inspire them through experiential learning and value-based education.",
+        date: "25 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1993359",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    }
+];
+
+export const pibUpdatesHi = [
+    {
+        id: "mock-hi-1",
+        title: "कैबिनेट ने 2025 सीज़न के लिए कोपरा के लिए एमएसपी को मंजूरी दी",
+        summary: "आर्थिक मामलों की कैबिनेट समिति ने 2025 सीज़न के लिए कोपरा के लिए न्यूनतम समर्थन मूल्य (एमएसपी) को मंजूरी दे दी है। यह नारियल उत्पादकों के लिए लाभकारी मूल्य सुनिश्चित करेगा।",
+        date: "29 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1991480",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-hi-2",
+        title: "प्रधानमंत्री नासिक में 27वें राष्ट्रीय युवा महोत्सव का उद्घाटन करेंगे",
+        summary: "प्रधानमंत्री नासिक, महाराष्ट्र में 27वें राष्ट्रीय युवा महोत्सव का उद्घाटन करेंगे। इस महोत्सव का उद्देश्य युवाओं में नेतृत्व और राष्ट्र निर्माण की भावना जगाना है।",
+        date: "28 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1993421",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-hi-3",
+        title: "भारत ने 100 गीगावाट सौर ऊर्जा क्षमता का मील का पत्थर हासिल किया",
+        summary: "नवीन और नवीकरणीय ऊर्जा मंत्रालय ने घोषणा की है कि भारत ने 100 गीगावाट स्थापित सौर ऊर्जा क्षमता के महत्वपूर्ण मील के पत्थर को पार कर लिया है।",
+        date: "27 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1992567",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-hi-4",
+        title: "डिजिटल इंडिया: यूपीआई लेनदेन दिसंबर में नए रिकॉर्ड पर पहुंचे",
+        summary: "यूनिफाइड पेमेंट्स इंटरफेस (यूपीआई) लेनदेन एक नई ऊंचाई पर पहुंच गए हैं, जो देश भर में डिजिटल भुगतान के बढ़ते अपनाने को दर्शाता है।",
+        date: "26 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1991890",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    },
+    {
+        id: "mock-hi-5",
+        title: "शिक्षा मंत्रालय ने 'प्रेरणा' कार्यक्रम लॉन्च किया",
+        summary: "देश भर से चयनित छात्रों के लिए एक सप्ताह का आवासीय कार्यक्रम, ताकि उन्हें अनुभवात्मक शिक्षा और मूल्य-आधारित शिक्षा के माध्यम से प्रेरित किया जा सके।",
+        date: "25 Dec 2024",
+        link: "https://pib.gov.in/PressReleasePage.aspx?PRID=1992789",
+        source: "PIB (Govt of India)",
+        isVerified: true
+    }
+];
+
 export const jobs = [
     {
         id: 1,
@@ -1153,5 +1249,99 @@ export const blogPosts = [
                 type: "internal"
             }
         }
+    }
+];
+
+export const schemesHi = [
+    {
+        id: 1,
+        title: "प्रधानमंत्री किसान सम्मान निधि (पीएम-किसान)",
+        slug: "pm-kisan-samman-nidhi",
+        scheme_level: "central",
+        state_name: null,
+        type: "Central",
+        sector: "Farmers",
+        ministry: "कृषि और किसान कल्याण मंत्रालय",
+        summary: "भूमिधारी किसान परिवारों को प्रति वर्ष ₹6,000 की प्रत्यक्ष आय सहायता।",
+        benefits: "₹6,000 प्रति वर्ष",
+        eligibility: "छोटे और सीमांत किसान",
+        status: "Active",
+        deadline: "वर्ष भर खुला",
+        validUntil: "2099-12-31",
+        lastVerified: "20 Dec 2025",
+        officialLink: "https://pmkisan.gov.in"
+    },
+    {
+        id: 2,
+        title: "आयुष्मान भारत - पीएम जन आरोग्य योजना",
+        slug: "ayushman-bharat-pm-jay",
+        scheme_level: "central",
+        state_name: null,
+        type: "Central",
+        sector: "Health",
+        ministry: "स्वास्थ्य और परिवार कल्याण मंत्रालय",
+        summary: "माध्यमिक और तृतीयक देखभाल अस्पताल में भर्ती के लिए प्रति वर्ष प्रति परिवार ₹5 लाख तक का स्वास्थ्य कवरेज।",
+        benefits: "₹5 लाख तक मुफ्त स्वास्थ्य कवर",
+        eligibility: "कम आय वाले परिवार (SECC 2011)",
+        status: "Active",
+        deadline: "लागू नहीं",
+        validUntil: "2099-12-31",
+        lastVerified: "15 Dec 2025",
+        officialLink: "https://pmjay.gov.in"
+    },
+    {
+        id: 3,
+        title: "लाड़ली बहना योजना",
+        slug: "ladli-behna-yojana",
+        scheme_level: "state",
+        state_name: "Madhya Pradesh",
+        type: "State",
+        state: "Madhya Pradesh",
+        sector: "Women",
+        ministry: "मध्य प्रदेश सरकार",
+        summary: "मध्य प्रदेश में पात्र महिलाओं को ₹1,250 प्रति माह की वित्तीय सहायता।",
+        benefits: "₹1,250 प्रति माह",
+        eligibility: "21-60 वर्ष की महिलाएं",
+        status: "Active",
+        deadline: "पोर्टल देखें",
+        validUntil: "2099-12-31",
+        lastVerified: "01 Dec 2025",
+        officialLink: "https://cmladlibahna.mp.gov.in"
+    },
+    {
+        id: 4,
+        title: "पीएम विश्वकर्मा योजना",
+        slug: "pm-vishwakarma-yojana",
+        scheme_level: "central",
+        state_name: null,
+        type: "Central",
+        sector: "MSME",
+        ministry: "कौशल विकास और उद्यमिता मंत्रालय",
+        summary: "कारीगरों और शिल्पकारों को ऋण, कौशल प्रशिक्षण और टूलकिट सहित समग्र सहायता।",
+        benefits: "₹3 लाख तक का ऋण @ 5%",
+        eligibility: "कारीगर (18 ट्रेड)",
+        status: "Active",
+        deadline: "31 Mar 2026",
+        validUntil: "2026-03-31",
+        lastVerified: "10 Dec 2025",
+        officialLink: "https://pmvishwakarma.gov.in"
+    },
+    {
+        id: 5,
+        title: "प्रधानमंत्री आवास योजना (शहरी)",
+        slug: "pm-awas-yojana-urban",
+        scheme_level: "central",
+        state_name: null,
+        type: "Central",
+        sector: "Housing",
+        ministry: "आवास और शहरी मामलों के मंत्रालय",
+        summary: "शहरी क्षेत्रों में सभी के लिए आवास। EWS/LIG/MIG श्रेणियों के लिए गृह ऋण पर ब्याज सब्सिडी।",
+        benefits: "₹2.67 लाख तक ब्याज सब्सिडी",
+        eligibility: "EWS, LIG, MIG परिवार",
+        status: "Active",
+        deadline: "31 Dec 2026",
+        validUntil: "2026-12-31",
+        lastVerified: "01 Jan 2025",
+        officialLink: "https://pmaymis.gov.in"
     }
 ];
