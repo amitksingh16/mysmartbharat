@@ -5,6 +5,8 @@ import ArticleCard from '../components/features/ArticleCard';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calculator } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import MarketDashboard from '../components/finance/MarketDashboard';
+import FinancialGlossary from '../components/finance/FinancialGlossary';
 
 const Finance = () => {
     const { t } = useTranslation();
@@ -21,6 +23,12 @@ const Finance = () => {
                     <h1>{t('finance.title')}</h1>
                     <p style={{ color: 'var(--text-grey)' }}>{t('finance.subtitle')}</p>
                 </div>
+
+                {/* New Feature: Market Dashboard */}
+                <MarketDashboard />
+                <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-grey)', marginTop: '0.5rem', marginBottom: '2rem' }}>
+                    {t('finance.subtitle')}
+                </p>
 
                 {/* Tools Teaser */}
                 <section style={{ marginBottom: '4rem' }}>
@@ -66,6 +74,9 @@ const Finance = () => {
                         <ArticleCard key={article.id} article={article} />
                     ))}
                 </div>
+
+                {/* New Feature: Financial Glossary */}
+                <FinancialGlossary />
             </div>
         </>
     );

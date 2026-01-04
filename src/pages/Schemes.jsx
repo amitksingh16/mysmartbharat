@@ -237,6 +237,9 @@ const Schemes = () => {
                                 >
                                     View All Schemes ({totalSchemes})
                                 </button>
+                                <p style={{ fontSize: '0.85rem', color: '#64748B', marginTop: '0.5rem' }}>
+                                    {t('schemes.showing_active', 'Showing active schemes only')}
+                                </p>
                             </div>
                         )}
 

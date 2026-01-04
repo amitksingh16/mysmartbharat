@@ -8,11 +8,10 @@ const CategoryCards = () => {
 
     const categories = [
         { id: 1, title: t('schemes.title'), icon: <BookOpen size={28} />, path: '/schemes', color: '#1E88E5', desc: t('categories.schemes_desc') },
-        { id: 2, title: t('finance.title'), icon: <TrendingUp size={28} />, path: '/finance', color: '#43A047', desc: t('categories.finance_desc') },
+        { id: 2, title: t('finance.title'), icon: <TrendingUp size={28} />, path: '/finance', color: '#43A047', desc: t('categories.finance_desc') }, // Finance Updates
         { id: 3, title: t('career.title'), icon: <Briefcase size={28} />, path: '/career', color: '#FB8C00', desc: t('categories.career_desc') },
-        { id: 4, title: t('tools.title'), icon: <Calculator size={28} />, path: '/tools', color: '#8E24AA', desc: t('categories.tools_desc') },
+        { id: 4, title: t('tools.title'), icon: <Calculator size={28} />, path: '/tools', color: '#8E24AA', desc: t('categories.tools_desc') }, // Financial Tools & Calculators
         { id: 5, title: t('categories.explained_title'), icon: <Newspaper size={28} />, path: '/explained', color: '#039BE5', desc: t('categories.explained_desc') },
-        { id: 6, title: t('categories.verified_title'), icon: <ShieldCheck size={28} />, path: '/verified', color: '#D81B60', desc: t('categories.verified_desc') },
     ];
 
     return (

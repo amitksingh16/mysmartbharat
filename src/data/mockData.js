@@ -1004,13 +1004,17 @@ export const financeUpdates = [
         id: 1,
         title: "New Income Tax Slabs for FY 2025-26",
         date: "20 Dec 2024",
-        summary: "Standard deduction increased to ₹75,000. Changes in default tax regime."
+        summary: "Standard deduction increased to ₹75,000. Changes in default tax regime.",
+        link: "https://incometaxindia.gov.in",
+        isVerified: true
     },
     {
         id: 2,
         title: "RBI Repo Rate Update",
         date: "15 Dec 2024",
-        summary: "RBI keeps repo rate unchanged at 6.5%. Home loan rates remain stable."
+        summary: "RBI keeps repo rate unchanged at 6.5%. Home loan rates remain stable.",
+        link: "https://rbi.org.in",
+        isVerified: true
     }
 ];
 

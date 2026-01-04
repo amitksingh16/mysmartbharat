@@ -12,12 +12,13 @@
         "toggle_label": "हिंदी"
     },
     "home": {
-        "hero_title": "Smart Bharat, Smart Citizen",
-        "hero_subtitle": "Your one-stop portal for Government Schemes, Financial Planning, and Career Growth.",
+        "hero_title": "India ka smart information portal —",
+        "hero_subtitle": "One trusted platform for Government Schemes, Jobs, Financial Tools, and Verified Updates.",
         "explore_btn": "Explore Schemes",
         "explore_categories": "Explore Categories",
         "latest_updates": "Latest Updates",
-        "search_placeholder": "Search schemes, jobs, finance...",
+        "search_placeholder": "Search government schemes, jobs, and financial tools…",
+        "search_helper": "Search across schemes, government jobs, and calculators.",
         "trust_verified": "Verified Sources",
         "trust_verified_desc": "Information verified from official government sources.",
         "trust_simple": "Simplified Language",
@@ -27,7 +28,7 @@
     },
     "schemes": {
         "title": "Government Schemes",
-        "subtitle": "Find schemes that benefit you.",
+        "subtitle": "Browse active Central and State Government schemes with direct links to official portals only.",
         "filter_all": "All Categories",
         "filter_central": "Central Govt",
         "filter_state": "State Govt",
@@ -37,11 +38,14 @@
         "type_label": "Type",
         "sector_label": "Sector",
         "filter_all_types": "All Types",
-        "filter_all_sectors": "All Sectors"
+        "filter_all_sectors": "All Sectors",
+        "showing_active": "Showing active schemes only",
+        "status_open": "🟢 Always Open",
+        "status_check": "🟡 Check Official Portal"
     },
     "finance": {
-        "title": "Financial Tools",
-        "subtitle": "Plan your future with smart calculators.",
+        "title": "Finance Updates",
+        "subtitle": "Market data is indicative only. Not intended for trading or investment decisions.",
         "teaser_title": "Plan Your Finances",
         "teaser_desc": "Use our EMI, SIP, and Tax calculators for free.",
         "try_calculators": "Try Calculators",
@@ -54,7 +58,7 @@
         "loan_amount": "Loan Amount",
         "interest_rate": "Interest Rate (%)",
         "duration": "Duration (Years)",
-        "calculate": "Calculate",
+        "calculate": "Calculate Now →",
         "results": "Results",
         "total_value": "Total Value",
         "invested": "Invested Amount",
@@ -73,6 +77,7 @@
     "career": {
         "title": "Career & Jobs",
         "subtitle": "Latest government jobs and exam updates.",
+        "trust_disclaimer": "🔒 All job updates are sourced only from official government websites such as SSC, UPSC, IBPS, SBI, and State Public Service Commissions.",
         "filter_all": "All Jobs",
         "filter_central": "Central Govt",
         "filter_bank": "Banking",
@@ -82,10 +87,11 @@
         "age_limit": "Age Limit",
         "view_job": "View Job",
         "vacancies": "Vacancies",
-        "full_time": "Full Time"
+        "full_time": "Full Time",
+        "apply_btn": "Apply on Official Website"
     },
     "tools": {
-        "title": "Smart Tools",
+        "title": "Financial Tools & Calculators",
         "subtitle": "Calculators and utilities for daily needs.",
         "emi_desc": "Calculate your home or car loan EMI.",
         "sip_desc": "Estimate your mutual fund returns.",

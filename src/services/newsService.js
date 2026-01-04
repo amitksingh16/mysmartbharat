@@ -90,10 +90,21 @@ export const fetchPibUpdates = async (language = 'en') => {
 };
 
 export const getMarketStatus = async () => {
-    // Placeholder for market status (Open/Closed/Nifty Level)
+    // Return realistic mock data
     return {
-        nifty: "21,456.70",
-        sensex: "71,200.30",
+        indices: [
+            { name: "Nifty 50", value: "26,328.55", change: "+182.30", percent: "+0.70%", isUp: true },
+            { name: "Sensex", value: "85,762.01", change: "+570.50", percent: "+0.67%", isUp: true },
+            { name: "Bank Nifty", value: "60,150.95", change: "+440.00", percent: "+0.74%", isUp: true }
+        ],
+        commodities: [
+            { name: "Gold (10g)", value: "₹1,37,985", change: "+₹1,250", isUp: true },
+            { name: "Silver (1kg)", value: "₹2,41,000", change: "-₹1,500", isUp: false },
+            { name: "Brent Oil", value: "$92.40", change: "+$1.50", isUp: true }
+        ],
+        currency: [
+            { name: "USD/INR", value: "₹85.50", change: "+0.10", isUp: false } // INR depreciating
+        ],
         status: "Market Open"
     };
 };

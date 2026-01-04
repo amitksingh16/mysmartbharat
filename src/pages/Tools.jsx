@@ -158,7 +158,17 @@ const Tools = () => {
                                             </span>
                                         </div>
                                         <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{tool.title}</h3>
-                                        <p style={{ color: 'var(--text-grey)', fontSize: '0.9rem' }}>{tool.desc}</p>
+                                        <p style={{ color: 'var(--text-grey)', fontSize: '0.9rem', marginBottom: '1rem' }}>{tool.desc}</p>
+                                        <span style={{
+                                            fontSize: '0.9rem',
+                                            fontWeight: 600,
+                                            color: 'var(--primary)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.25rem'
+                                        }}>
+                                            {t('finance.calculate', 'Calculate Now')} →
+                                        </span>
                                     </div>
                                 </a>
                             ))}

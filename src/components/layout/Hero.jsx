@@ -5,27 +5,22 @@ import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
     const { t } = useTranslation();
-    const [searchText, setSearchText] = useState('');
-    const [animatedText, setAnimatedText] = useState(''); // Initial empty to avoid blink, or load first key
     const navigate = useNavigate();
+    const [searchText, setSearchText] = useState('');
 
     // Hover states for chips
     const [hoveredChip, setHoveredChip] = useState(null);
 
-    // Translation keys for cycle
-    const wordKeys = ['nav.finance', 'nav.career', 'nav.schemes', 'nav.tools'];
+    // Words to animate
+    const words = ["schemes", "finance", "career", "tools", "verified updates"];
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
     useEffect(() => {
-        let index = 0;
-        // Set initial
-        setAnimatedText(t(wordKeys[0]));
-
         const interval = setInterval(() => {
-            index = (index + 1) % wordKeys.length;
-            setAnimatedText(t(wordKeys[index]));
+            setCurrentWordIndex((prev) => (prev + 1) % words.length);
         }, 2000);
         return () => clearInterval(interval);
-    }, [t]); // Add t to dependency to update when language changes
+    }, []);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -37,10 +32,34 @@ const Hero = () => {
     return (
         <section className="section" style={{
             background: 'linear-gradient(180deg, rgba(237, 247, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%)',
-            padding: '4rem 0 3.5rem', // Reduced padding ~15%
+            padding: '4rem 0 3.5rem',
             position: 'relative',
             overflow: 'hidden'
         }}>
+            {/* Animation Styles */}
+            <style>{`
+                @keyframes slideUpFade {
+                    0% { opacity: 0; transform: translateY(10px); }
+                    10% { opacity: 1; transform: translateY(0); }
+                    90% { opacity: 1; transform: translateY(0); }
+                    100% { opacity: 0; transform: translateY(-10px); }
+                }
+                .animated-word {
+                    display: inline-block;
+                    color: #F57F17;
+                    min-width: 150px;
+                    text-align: left;
+                    animation: slideUpFade 2s infinite;
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .animated-word {
+                        animation: none;
+                        opacity: 1;
+                        transform: none;
+                    }
+                }
+            `}</style>
+
             {/* Subtle background element - Option B: Ultra-light dotted pattern */}
             <div style={{
                 position: 'absolute',
@@ -60,14 +79,15 @@ const Hero = () => {
                 <h1 style={{
                     fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                     marginBottom: '1rem',
-                    color: '#0D47A1', // Stronger brand blue
-                    fontWeight: 700, // Reduced from 800
+                    color: '#0D47A1',
+                    fontWeight: 700,
                     lineHeight: 1.2,
                     letterSpacing: '-0.02em'
                 }}>
-                    {t('home.hero_title').split(',')[0]} — <br className="mobile-break" />
-                    <span style={{ color: '#F57F17', display: 'inline-block', minWidth: '200px' }}>
-                        {animatedText}
+                    {t('home.hero_title')} <br className="mobile-break" />
+                    {/* Key change forces re-render of span to restart animation cleanly */}
+                    <span key={currentWordIndex} className="animated-word">
+                        {words[currentWordIndex]}
                     </span>
                 </h1>
 
@@ -137,6 +157,10 @@ const Hero = () => {
                             {t('common.search')}
                         </button>
                     </div>
+                    {/* Helper Text */}
+                    <p style={{ marginTop: '0.8rem', fontSize: '0.9rem', color: '#64748B' }}>
+                        {t('home.search_helper', 'Search across schemes, government jobs, and calculators.')}
+                    </p>
                 </form>
 
                 {/* Trust Badges */}

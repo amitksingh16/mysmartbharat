@@ -20,6 +20,8 @@ const Footer = () => {
                         <h4 style={{ color: 'var(--white)', marginBottom: '1rem', fontSize: '1rem' }}>{t('footer.quick_links')}</h4>
                         <ul style={{ listStyle: 'none', padding: 0, opacity: 0.8, fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                             <li><Link to="/about">{t('nav.about')}</Link></li>
+                            <li><Link to="/sources">Sources & Verification</Link></li>
+                            <li><Link to="/disclaimer">Disclaimer</Link></li>
                             <li><Link to="/contact">{t('nav.contact')}</Link></li>
                             <li><Link to="/privacy-policy">{t('footer.privacy')}</Link></li>
                             <li><Link to="/terms">{t('footer.terms')}</Link></li>

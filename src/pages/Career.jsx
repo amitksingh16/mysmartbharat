@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { getLatestJobs } from '../services/jobsService';
 import Card from '../components/common/Card';
-import { Briefcase, Calendar, MapPin, Loader } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, Loader, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Career = () => {
@@ -26,9 +26,23 @@ const Career = () => {
         fetchJobs();
     }, []);
 
+    const parseDate = (dateStr) => {
+        // Handle "15 Jan 2026" format
+        return new Date(dateStr);
+    };
+
     const filteredJobs = jobs.filter(job => {
-        if (filter === 'All') return true;
-        return job.category === filter;
+        const matchesFilter = filter === 'All' || job.category === filter;
+
+        // Ensure not expired (redundant if service handles it, but safe)
+        const deadline = parseDate(job.deadline);
+        const today = new Date();
+        const isFuture = deadline >= today;
+
+        return matchesFilter && isFuture;
+    }).sort((a, b) => {
+        // Sort by nearest deadline (Ascending)
+        return parseDate(a.deadline) - parseDate(b.deadline);
     });
 
     const categories = ['All', 'Central', 'State', 'Bank', 'Railway', 'Defense', 'Teaching'];
@@ -41,7 +55,23 @@ const Career = () => {
             </Helmet>
 
             <div className="container section">
-                <h1 style={{ marginBottom: '2rem' }}>{t('career.title')}</h1>
+                <h1 style={{ marginBottom: '1rem' }}>{t('career.title')}</h1>
+
+                {/* Trust Disclaimer */}
+                <div style={{
+                    background: '#e3f2fd',
+                    color: '#0d47a1',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '8px',
+                    marginBottom: '2rem',
+                    fontSize: '0.9rem',
+                    border: '1px solid #bbdefb',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                }}>
+                    <span>{t('career.trust_disclaimer')}</span>
+                </div>
 
                 {/* Filter Buttons */}
                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
@@ -101,7 +131,15 @@ const Career = () => {
                                     </div>
 
                                     <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
-                                        <a href={job.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ flex: 1, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t('common.apply_now')}</a>
+                                        <a
+                                            href={job.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn btn-primary"
+                                            style={{ flex: 1, textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                                        >
+                                            {t('career.apply_btn', 'Apply on Official Website')} <ExternalLink size={16} />
+                                        </a>
                                     </div>
                                 </Card>
                             ))
