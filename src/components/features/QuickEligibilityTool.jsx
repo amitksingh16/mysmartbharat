@@ -56,7 +56,7 @@ const QuickEligibilityTool = () => {
                                 <div
                                     key={s}
                                     className={`h-2 rounded-full transition-all duration-300 ${s === step ? 'w-8 bg-secondary' :
-                                            s < step ? 'w-2 bg-green-500' : 'w-2 bg-slate-200 dark:bg-slate-700'
+                                        s < step ? 'w-2 bg-green-500' : 'w-2 bg-slate-200 dark:bg-slate-700'
                                         }`}
                                 />
                             ))}
@@ -78,7 +78,6 @@ const QuickEligibilityTool = () => {
                                         onChange={handleChange}
                                         placeholder="e.g. 25"
                                         className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                                        autoFocus
                                     />
                                 </div>
                             )}
@@ -131,8 +130,8 @@ const QuickEligibilityTool = () => {
                                 onClick={handleNext}
                                 disabled={!isStepValid()}
                                 className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold transition-all ${isStepValid()
-                                        ? 'bg-primary hover:bg-primary-light text-white shadow-md transform hover:translate-x-1'
-                                        : 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
+                                    ? 'bg-primary hover:bg-primary-light text-white shadow-md transform hover:translate-x-1'
+                                    : 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
                                     }`}
                             >
                                 {step === totalSteps ? (t('common.check_eligibility') || "Check Eligibility") : (t('common.next') || "Next")}
