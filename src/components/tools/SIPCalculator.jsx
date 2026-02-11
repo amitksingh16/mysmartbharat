@@ -3,6 +3,7 @@ import CalculatorLayout from './CalculatorLayout';
 import { calculateSIP } from '../../utils/calculators';
 import { IndianRupee, TrendingUp, Clock } from 'lucide-react';
 import Card from '../common/Card';
+import SimplePieChart from '../common/SimplePieChart';
 
 const SIPCalculator = () => {
     const [monthlyInvestment, setMonthlyInvestment] = useState(5000);
@@ -22,20 +23,35 @@ const SIPCalculator = () => {
         }).format(val);
     };
 
+    const chartData = result ? [
+        { name: 'Invested Amount', value: result.investedAmount },
+        { name: 'Est. Returns', value: result.estReturns }
+    ] : [];
+
     const results = (
         <Card className="results-card" style={{ background: 'var(--bg-light)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                 <p style={{ color: 'var(--text-grey)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Total Value</p>
                 <h2 style={{ fontSize: '2.5rem', color: 'var(--primary)', marginTop: '0.5rem' }}>{result ? formatCurrency(result.totalValue) : '-'}</h2>
             </div>
 
+            <div style={{ marginBottom: '1rem' }}>
+                <SimplePieChart data={chartData} />
+            </div>
+
             <div style={{ display: 'grid', gap: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', background: 'white', borderRadius: 'var(--radius-md)' }}>
-                    <span style={{ color: 'var(--text-grey)' }}>Invested Amount</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#4F46E5' }}></div>
+                        <span style={{ color: 'var(--text-grey)' }}>Invested Amount</span>
+                    </div>
                     <span style={{ fontWeight: '600' }}>{result ? formatCurrency(result.investedAmount) : '-'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', background: 'white', borderRadius: 'var(--radius-md)' }}>
-                    <span style={{ color: 'var(--text-grey)' }}>Est. Returns</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }}></div>
+                        <span style={{ color: 'var(--text-grey)' }}>Est. Returns</span>
+                    </div>
                     <span style={{ fontWeight: '600', color: '#059669' }}>{result ? formatCurrency(result.estReturns) : '-'}</span>
                 </div>
             </div>

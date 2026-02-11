@@ -1,213 +1,273 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { schemes } from '../data/mockData';
-import { ArrowLeft, CheckCircle, ExternalLink, Calendar, Users, FileText, ChevronRight } from 'lucide-react';
+import {
+    ArrowLeft, CheckCircle, ExternalLink, Calendar, Users,
+    FileText, ChevronRight, Share2, Printer, Bookmark,
+    Clock, Shield, Building2, Download, AlertCircle
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const SchemeDetail = () => {
     const { slug } = useParams();
     const { t } = useTranslation();
     const scheme = schemes.find(s => s.slug === slug);
+    const contentRef = useRef(null);
 
     if (!scheme) {
         return (
-            <div className="container section" style={{ textAlign: 'center', padding: '5rem 0' }}>
-                <h2>Scheme not found</h2>
-                <Link to="/schemes" className="btn btn-primary" style={{ marginTop: '1rem' }}>Back to Schemes</Link>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+                <h2 className="text-2xl font-bold text-slate-800 mb-4">Scheme not found</h2>
+                <Link to="/schemes" className="px-6 py-2 bg-primary text-white rounded-full hover:bg-blue-700 transition">
+                    Back to Schemes
+                </Link>
             </div>
         );
     }
 
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const handleShare = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: scheme.title,
+                text: scheme.summary,
+                url: window.location.href,
+            });
+        }
+    };
+
     return (
-        <>
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
             <Helmet>
                 <title>{scheme.title} | MySmartBharat</title>
                 <meta name="description" content={scheme.summary} />
             </Helmet>
 
-            {/* Breadcrumb */}
-            <div style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                <div className="container" style={{ padding: '0.8rem 1rem', fontSize: '0.9rem', color: '#64748b' }}>
-                    <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
-                    <span style={{ margin: '0 0.5rem' }}>/</span>
-                    <Link to="/schemes" style={{ color: 'inherit', textDecoration: 'none' }}>{t('nav.schemes')}</Link>
-                    <span style={{ margin: '0 0.5rem' }}>/</span>
-                    <span style={{ color: '#0f172a', fontWeight: 500 }}>{scheme.title}</span>
+            {/* 1. Breadcrumbs & Top Bar */}
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+                    <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+                        <Link to="/" className="hover:text-primary transition">Home</Link>
+                        <ChevronRight size={14} className="mx-2" />
+                        <Link to="/schemes" className="hover:text-primary transition">Schemes</Link>
+                        <ChevronRight size={14} className="mx-2" />
+                        <span className="font-medium text-slate-800 dark:text-white truncate max-w-[150px] sm:max-w-md">
+                            {scheme.title}
+                        </span>
+                    </div>
+
+                    {/* Action Buttons (Desktop) */}
+                    <div className="hidden sm:flex items-center gap-2">
+                        <button onClick={handleShare} className="p-2 text-slate-500 hover:text-primary hover:bg-slate-50 rounded-full transition" title="Share">
+                            <Share2 size={18} />
+                        </button>
+                        <button onClick={handlePrint} className="p-2 text-slate-500 hover:text-primary hover:bg-slate-50 rounded-full transition" title="Print">
+                            <Printer size={18} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* Hero Section */}
-            <div style={{ background: 'white', borderBottom: '1px solid #e2e8f0', padding: '3rem 0' }}>
-                <div className="container">
-                    <Link to="/schemes" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', marginBottom: '1.5rem', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500 }}>
-                        <ArrowLeft size={16} /> Back to Schemes
+            {/* 2. Hero Section */}
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pb-12 pt-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Link to="/schemes" className="inline-flex items-center text-slate-500 hover:text-primary text-sm font-medium mb-6 transition">
+                        <ArrowLeft size={16} className="mr-1" /> Back to Schemes
                     </Link>
 
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                        <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', gap: '0.8rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                                <span style={{
-                                    background: scheme.type === 'Central' ? '#e0f2fe' : '#f0fdf4',
-                                    color: scheme.type === 'Central' ? '#0369a1' : '#15803d',
-                                    padding: '0.2rem 0.8rem',
-                                    borderRadius: '50px',
-                                    fontSize: '0.85rem',
-                                    fontWeight: 600,
-                                    border: `1px solid ${scheme.type === 'Central' ? '#bae6fd' : '#bbf7d0'}`
-                                }}>
+                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                        <div className="flex-1">
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                <span className={`px-3 py-1 rounded-full text-xs font-bold border ${scheme.type === 'Central'
+                                        ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800'
+                                        : 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'
+                                    }`}>
                                     {scheme.type} Govt
                                 </span>
                                 {scheme.ministry && (
-                                    <span style={{
-                                        background: '#f1f5f9',
-                                        color: '#475569',
-                                        padding: '0.2rem 0.8rem',
-                                        borderRadius: '50px',
-                                        fontSize: '0.85rem',
-                                        border: '1px solid #e2e8f0'
-                                    }}>
+                                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">
                                         {scheme.ministry}
                                     </span>
                                 )}
                             </div>
-                            <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: '#0f172a', marginBottom: '1rem', lineHeight: 1.2 }}>
+
+                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
                                 {scheme.title}
                             </h1>
-                            <p style={{ fontSize: '1.15rem', color: '#475569', maxWidth: '800px', lineHeight: 1.6 }}>
+
+                            <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
                                 {scheme.summary}
                             </p>
+
+                            <div className="mt-8 flex flex-wrap gap-6 text-sm text-slate-500 dark:text-slate-400">
+                                <div className="flex items-center gap-2">
+                                    <Clock size={16} className="text-primary" />
+                                    Last Updated: <span className="font-medium text-slate-800 dark:text-slate-200">{scheme.lastVerified}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Shield size={16} className="text-green-600" />
+                                    Status: <span className="font-medium text-green-600">Verified & Active</span>
+                                </div>
+                            </div>
                         </div>
-                        <div style={{ minWidth: '200px' }}>
-                            <a href={scheme.officialLink} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.8rem 1.5rem' }}>
-                                Apply on Official Website <ExternalLink size={18} />
-                            </a>
-                            <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.5rem', textAlign: 'center' }}>
-                                Verified on {scheme.lastVerified}
-                            </p>
+
+                        {/* Quick Action Card (Mobile/Desktop Hero) */}
+                        <div className="w-full lg:w-80 shrink-0">
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
+                                <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Application Deadline</span>
+                                <div className="text-lg font-bold text-red-600 flex items-center gap-2 mb-6">
+                                    <Calendar size={20} />
+                                    {scheme.deadline}
+                                </div>
+
+                                <a
+                                    href={scheme.officialLink}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="block w-full py-3.5 bg-primary hover:bg-blue-700 text-white font-bold text-center rounded-xl shadow-lg shadow-blue-500/20 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                >
+                                    Apply Online <ExternalLink size={18} />
+                                </a>
+
+                                <p className="text-xs text-center text-slate-400 mt-3">
+                                    Redirects to official government portal
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="container section" style={{ display: 'grid', gridTemplateColumns: 'revert-layer', gap: '3rem' }}>
+            {/* 3. Main Content Layout (2-Col) */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-                    {/* At a Glance */}
-                    <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                        <div className="card" style={{ padding: '1.5rem', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-                            <div style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Users size={16} /> Beneficiaries
-                            </div>
-                            <div style={{ fontWeight: 600, color: '#0f172a' }}>{scheme.eligibility}</div>
-                        </div>
-                        <div className="card" style={{ padding: '1.5rem', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-                            <div style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <FileText size={16} /> Benefits
-                            </div>
-                            <div style={{ fontWeight: 600, color: '#0f172a' }}>{scheme.benefits}</div>
-                        </div>
-                        <div className="card" style={{ padding: '1.5rem', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-                            <div style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Calendar size={16} /> Deadline
-                            </div>
-                            <div style={{ fontWeight: 600, color: '#dc2626' }}>{scheme.deadline}</div>
-                        </div>
-                    </section>
+                    {/* Left Column: Detailed Content (8 cols) */}
+                    <div className="lg:col-span-8 space-y-12">
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '3rem', alignItems: 'start' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-                            {/* About */}
-                            <section>
-                                <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                    <span style={{ width: '4px', height: '28px', background: 'var(--primary)', borderRadius: '4px' }}></span>
-                                    About the Scheme
-                                </h2>
-                                <p style={{ lineHeight: 1.7, color: '#334155' }}>
-                                    {scheme.details?.intro || scheme.summary}
-                                </p>
-                            </section>
-
-                            {/* Eligibility */}
-                            <section>
-                                <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                    <span style={{ width: '4px', height: '28px', background: 'var(--primary)', borderRadius: '4px' }}></span>
-                                    Eligibility Criteria
-                                </h2>
-                                <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.8rem' }}>
-                                    {scheme.details?.eligibilityCriteria?.map((item, index) => (
-                                        <li key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'start', background: '#fff', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                                            <CheckCircle size={20} color="var(--success)" style={{ marginTop: '2px', flexShrink: 0 }} />
-                                            <span style={{ color: '#334155' }}>{item}</span>
-                                        </li>
-                                    )) || <li>Check official website for details.</li>}
-                                </ul>
-                            </section>
-
-                            {/* Benefits Detail */}
-                            <section>
-                                <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                    <span style={{ width: '4px', height: '28px', background: 'var(--primary)', borderRadius: '4px' }}></span>
-                                    Benefits Details
-                                </h2>
-                                <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-                                    {scheme.details?.benefitsList?.map((item, index) => (
-                                        <div key={index} style={{ padding: '1.2rem', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                                            <div style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '0.4rem' }}>{item.title}</div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#0f172a' }}>{item.value}</div>
-                                        </div>
-                                    )) || <p>See benefits summary above.</p>}
+                        {/* At a Glance Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-lg">
+                                        <Users size={20} />
+                                    </div>
+                                    <h3 className="font-bold text-slate-800 dark:text-white">Who can apply?</h3>
                                 </div>
-                            </section>
-
-                            {/* How to Apply */}
-                            <section>
-                                <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                    <span style={{ width: '4px', height: '28px', background: 'var(--primary)', borderRadius: '4px' }}></span>
-                                    How to Apply
-                                </h2>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    {scheme.details?.applicationProcess?.map((step, index) => (
-                                        <div key={index} style={{ display: 'flex', gap: '1.5rem' }}>
-                                            <div style={{ flexShrink: 0, width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                                                {index + 1}
-                                            </div>
-                                            <p style={{ marginTop: '0.2rem', color: '#334155' }}>{step}</p>
-                                        </div>
-                                    )) || <p>Visit the official portal to apply.</p>}
+                                <p className="text-slate-600 dark:text-slate-300">{scheme.eligibility}</p>
+                            </div>
+                            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition">
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="p-2 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-lg">
+                                        <FileText size={20} />
+                                    </div>
+                                    <h3 className="font-bold text-slate-800 dark:text-white">Main Benefit</h3>
                                 </div>
-                            </section>
+                                <p className="text-slate-600 dark:text-slate-300">{scheme.benefits}</p>
+                            </div>
                         </div>
 
-                        {/* Sidebar (Desktop) / Bottom (Mobile) */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                            {/* Documents Required */}
-                            <div style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
-                                <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: '#0f172a' }}>Documents Required</h3>
-                                <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.8rem' }}>
-                                    {scheme.details?.documentsRequired?.map((doc, index) => (
-                                        <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', fontSize: '0.95rem', color: '#475569' }}>
-                                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#cbd5e1' }}></span>
-                                            {doc}
-                                        </li>
-                                    )) || <li>Details on portal.</li>}
-                                </ul>
-                            </div>
+                        {/* Overview */}
+                        <section>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3">
+                                <span className="w-1.5 h-8 bg-secondary rounded-full"></span>
+                                Overview
+                            </h2>
+                            <p className="text-slate-600 dark:text-slate-300 leading-7 text-lg">
+                                {scheme.details?.intro || scheme.summary}
+                            </p>
+                        </section>
 
-                            {/* Official Sources */}
-                            <div style={{ background: '#f0f9ff', padding: '1.5rem', borderRadius: '12px', border: '1px solid #bae6fd' }}>
-                                <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: '#0369a1' }}>Official Sources</h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                                    <a href={scheme.officialLink} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#0284c7', textDecoration: 'none', fontWeight: 500 }}>
-                                        <ExternalLink size={16} /> Official Website
+                        {/* Benefits Breakdown (Cards) */}
+                        <section>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                                <span className="w-1.5 h-8 bg-secondary rounded-full"></span>
+                                Key Benefits
+                            </h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {scheme.details?.benefitsList?.map((item, index) => (
+                                    <div key={index} className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
+                                        <p className="text-sm font-semibold text-slate-500 mb-1">{item.title}</p>
+                                        <p className="text-lg font-bold text-slate-800 dark:text-white">{item.value}</p>
+                                    </div>
+                                )) || <p className="text-slate-500">See summary above.</p>}
+                            </div>
+                        </section>
+
+                        {/* Eligibility Criteria (List) */}
+                        <section>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                                <span className="w-1.5 h-8 bg-secondary rounded-full"></span>
+                                Eligibility Criteria
+                            </h2>
+                            <ul className="space-y-4">
+                                {scheme.details?.eligibilityCriteria?.map((item, index) => (
+                                    <li key={index} className="flex items-start gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                                        <CheckCircle className="text-green-500 mt-0.5 shrink-0" size={20} />
+                                        <span className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed">{item}</span>
+                                    </li>
+                                )) || <li>Check official website.</li>}
+                            </ul>
+                        </section>
+
+                        {/* How to Apply (Timeline) */}
+                        <section>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                                <span className="w-1.5 h-8 bg-secondary rounded-full"></span>
+                                Application Process
+                            </h2>
+                            <div className="relative pl-8 border-l-2 border-slate-200 dark:border-slate-700 space-y-8">
+                                {scheme.details?.applicationProcess?.map((step, index) => (
+                                    <div key={index} className="relative">
+                                        <div className="absolute -left-[41px] top-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm border-4 border-slate-50 dark:border-slate-950">
+                                            {index + 1}
+                                        </div>
+                                        <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-2">Step {index + 1}</h3>
+                                        <p className="text-slate-600 dark:text-slate-300">{step}</p>
+                                    </div>
+                                )) || <p>Visit portal.</p>}
+                            </div>
+                        </section>
+                    </div>
+
+                    {/* Right Column: Sticky Sidebar (4 cols) */}
+                    <div className="lg:col-span-4 space-y-8">
+
+                        {/* Documents Required Widget */}
+                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 sticky top-24">
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <FileText className="text-secondary" /> Documents Required
+                            </h3>
+                            <ul className="space-y-3">
+                                {scheme.details?.documentsRequired?.map((doc, index) => (
+                                    <li key={index} className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-300 pb-3 border-b border-slate-100 dark:border-slate-700 last:border-0 last:pb-0">
+                                        <div className="mt-1 w-1.5 h-1.5 rounded-full bg-secondary shrink-0"></div>
+                                        {doc}
+                                    </li>
+                                )) || <li>See portal.</li>}
+                            </ul>
+
+                            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700">
+                                <h4 className="font-bold text-slate-900 dark:text-white mb-3 text-sm">Need Help?</h4>
+                                <div className="space-y-2">
+                                    <a href={scheme.officialLink} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm text-primary font-medium hover:underline">
+                                        <ExternalLink size={14} /> Official Website
+                                    </a>
+                                    <a href="#" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700">
+                                        <AlertCircle size={14} /> Report an Issue
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

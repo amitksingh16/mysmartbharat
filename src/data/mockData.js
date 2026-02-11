@@ -1253,6 +1253,66 @@ export const blogPosts = [
                 type: "internal"
             }
         }
+    },
+    {
+        id: 5,
+        slug: "digital-rupee-pilot",
+        title: "RBI's Digital Rupee (e₹): How to Use It?",
+        category: "Finance Explained",
+        summary: "The Reserve Bank of India has launched the pilot for the Digital Rupee. Learn how it differs from UPI and how you can get it.",
+        readTime: "5 min read",
+        verified: true,
+        publishedDate: "28 Dec 2024",
+        lastUpdated: "29 Dec 2024",
+        content: {
+            intro: "Digital Rupee (e₹) is a legal tender, similar to sovereign paper currency, and is issued in digital form by the Reserve Bank of India.",
+            sections: [],
+            cta: {
+                text: "Read More",
+                link: "#",
+                type: "internal"
+            }
+        }
+    },
+    {
+        id: 6,
+        slug: "solar-rooftop-subsidy",
+        title: "PM Surya Ghar: Get Free Electricity & Subsidy",
+        category: "Scheme Update",
+        summary: "New guidelines released for the PM Surya Ghar Muft Bijli Yojana. Check how much subsidy you can get for a 3kW plant.",
+        readTime: "4 min read",
+        verified: true,
+        publishedDate: "30 Dec 2024",
+        lastUpdated: "30 Dec 2024",
+        content: {
+            intro: "Government has simplified the process for applying for rooftop solar subsidy.",
+            sections: [],
+            cta: {
+                text: "Check Eligibility",
+                link: "/schemes/pm-surya-ghar",
+                type: "internal"
+            }
+        }
+    },
+    {
+        id: 7,
+        slug: "railway-concession-seniors",
+        title: "Senior Citizen Railway Concession: Latest Updates",
+        category: "Travel & Transport",
+        summary: "Will the railway concession for senior citizens return in 2025? Here is what the Railway Minister said in the Parliament.",
+        readTime: "3 min read",
+        verified: true,
+        publishedDate: "25 Dec 2024",
+        lastUpdated: "26 Dec 2024",
+        content: {
+            intro: "Speculations are high regarding the restoration of concessions.",
+            sections: [],
+            cta: {
+                text: "Check Updates",
+                link: "#",
+                type: "internal"
+            }
+        }
     }
 ];
 

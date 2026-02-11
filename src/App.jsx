@@ -9,6 +9,7 @@ import FDCalculator from './components/tools/FDCalculator';
 import RDCalculator from './components/tools/RDCalculator';
 import PPFCalculator from './components/tools/PPFCalculator';
 import Schemes from './pages/Schemes';
+import FindSchemes from './pages/FindSchemes';
 import SchemeDetail from './pages/SchemeDetail';
 import Finance from './pages/Finance';
 import Career from './pages/Career';
@@ -32,6 +33,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<SearchResults />} />
               <Route path="/schemes" element={<Schemes />} />
+              <Route path="/find-schemes" element={<FindSchemes />} />
               <Route path="/schemes/:slug" element={<SchemeDetail />} />
               <Route path="/explained" element={<Explained />} />
               <Route path="/explained/:slug" element={<ExplainedDetail />} />
@@ -39,12 +41,7 @@ function App() {
               <Route path="/career" element={<Career />} />
 
               <Route path="/tools" element={<Tools />} />
-              <Route path="/tools/sip" element={<SIPCalculator />} />
-              <Route path="/tools/lumpsum" element={<LumpSumCalculator />} />
-              <Route path="/tools/tax" element={<IncomeTaxCalculator />} />
-              <Route path="/tools/fd" element={<FDCalculator />} />
-              <Route path="/tools/rd" element={<RDCalculator />} />
-              <Route path="/tools/ppf" element={<PPFCalculator />} />
+              <Route path="/tools/:toolId" element={<Tools />} />
 
               <Route path="/news" element={<News />} />
               <Route path="/about" element={<About />} />

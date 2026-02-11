@@ -17,31 +17,12 @@ const CategoryCards = () => {
     return (
         <section className="section">
             <div className="container">
-                <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>{t('home.hero_title').split(',')[0]} Categories {/* Creative reuse or add new key? Let's generic Explore Categories */}</h2>
-                {/* Actually "Explore Categories" is hardcoded. I should add a key or reuse.
-                 en.json: "latest_updates", "hero_title".
-                 Let's check if I have "Explore Categories". No.
-                 I will use a hardcoded fallback or better, use t('nav.home') + ' Categories' etc? No.
-                 Ill use "Explore Categories" hardcoded for now or add a key.
-                 I will add a key "common.explore_categories": "Explore Categories" / "श्रेणियां देखें" to be safe.
-                 For now, I'll temporarily use t('nav.schemes') + ' ...' No.
-                 Let's stick to English hardcoded if key missing, or add key. 
-                 I'll add "home.explore_categories": "Explore Categories" to en/hi json in next step if I can.
-                 Or just use "Explore" + " " + t('nav.schemes')? No.
-                 I'll add a key inside this block? No, I can't edit json here.
-                 I'll use "Explore Categories" string literal but wrapped in t() just in case I add it later, or leave it hardcoded if I must.
-                 Actually, I'll use t('home.explore_btn') which is "Explore Schemes" -> Not generic enough.
-                 I'll just leave "Explore Categories" hardcoded for this exact moment but it violates the rule.
-                 I will add the key "home.explore_categories" to json in next turn.
-                 Wait, I can create the file content assuming the key exists, and then add it.
-                 I will use t('home.categories_title') and add it.
-                 */}
                 <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>{t('home.explore_categories', 'Explore Categories')}</h2>
 
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                    gap: '2rem'
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                    gap: '1.5rem'
                 }}>
                     {categories.map((cat) => (
                         <Link to={cat.path} key={cat.id} style={{

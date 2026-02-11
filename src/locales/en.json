@@ -12,8 +12,12 @@
         "toggle_label": "हिंदी"
     },
     "home": {
-        "hero_title": "India ka smart information portal —",
-        "hero_subtitle": "One trusted platform for Government Schemes, Jobs, Financial Tools, and Verified Updates.",
+        "hero_title": "Empowering Every Indian with",
+        "hero_subtitle": "Your one-stop guide for Government Schemes, Jobs, and Financial Planning.",
+        "hero_subtitle_suffix": "smart tools & info",
+        "hero_desc": "One-stop portal for Government Schemes, Financial Tools, and Career Updates.",
+        "eligibility_title": "Quick Eligibility Check",
+        "eligibility_desc": "Answer 3 simple questions to find schemes meant for you.",
         "explore_btn": "Explore Schemes",
         "explore_categories": "Explore Categories",
         "latest_updates": "Latest Updates",
@@ -137,6 +141,11 @@
         "apply_now": "Apply Now",
         "available_in_english": "Available in English",
         "search": "Search",
-        "all": "All"
+        "all": "All",
+        "enter_age": "What is your Age?",
+        "select_state": "Select your State",
+        "annual_income": "Annual Family Income?",
+        "check_eligibility": "Check Eligibility",
+        "next": "Next"
     }
 }

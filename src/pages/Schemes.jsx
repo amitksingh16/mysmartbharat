@@ -1,278 +1,243 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { getSchemes } from '../services/schemesService';
-import SchemeCard from '../components/features/SchemeCard';
-import { Filter } from 'lucide-react';
+import { Filter, Search, MapPin, ArrowRight, ChevronDown, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const Schemes = () => {
     const { t, i18n } = useTranslation();
-    const [typeFilter, setTypeFilter] = useState('All');
-    const [sectorFilter, setSectorFilter] = useState('All');
-    // State Filter: 'All India' is default
-    const [stateFilter, setStateFilter] = useState('All India');
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    // Local Filters
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [selectedState, setSelectedState] = useState('All India');
+
+    // Data State
     const [allSchemes, setAllSchemes] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    React.useEffect(() => {
+    // Initial Load
+    useEffect(() => {
         const loadSchemes = async () => {
-            try {
-                setLoading(true);
-                // Pass current language to service
-                const data = await getSchemes('All', i18n.language);
-                // If we get fewer schemes in Hindi (partial translation), it will show fewer cards.
-                // This is expected behavior for now as we only translated 5 items.
-                setAllSchemes(data || []);
-            } catch (error) {
-                console.error("Failed to load schemes");
-            } finally {
-                setLoading(false);
-            }
+            setLoading(true);
+            const data = await getSchemes('All', i18n.language);
+            setAllSchemes(data || []);
+            setLoading(false);
         };
         loadSchemes();
-    }, [i18n.language]); // Refetch when language changes
+    }, [i18n.language]);
 
-    // State for View Mode: 'initial' or 'all'
-    const [viewMode, setViewMode] = useState('initial');
-    const [currentPage, setCurrentPage] = useState(1);
-    const SCHEMES_PER_PAGE = 9;
+    // Sync URL Params with State
+    useEffect(() => {
+        const cat = searchParams.get('category');
+        const st = searchParams.get('state');
+        // If params exist, use them; otherwise verify if we should reset (or keep existing state if user just navigated)
+        // Actually, if URL changes, we should sync state to it. If param is missing, it means "All".
+        setSelectedCategory(cat || 'All');
+        setSelectedState(st || 'All India');
+    }, [searchParams]);
 
-    const filteredSchemes = allSchemes.filter(s => {
-        // Filter by Type
-        const matchType = typeFilter === 'All' || s.type === typeFilter;
-
-        // Filter by Sector
-        const matchSector = sectorFilter === 'All' || s.sector === sectorFilter;
-
-        // Filter by State
-        // If 'All India' selected: Show all Central + all State (Mixed) - As per requirement "Show All Central + All State together"
-        // If Specific State selected: Show ALL Central + Schemes matching Only that state
-
-        let matchState = true;
-        if (stateFilter !== 'All India') {
-            if (s.scheme_level === 'central') {
-                matchState = true; // Central schemes shown for all states
-            } else {
-                matchState = s.state_name === stateFilter;
-            }
-        }
-
-        // Filter by Active Status (Deadline check)
-        let isNotExpired = true;
-        if (s.validUntil) {
-            const today = new Date().toISOString().split('T')[0];
-            if (s.validUntil < today) {
-                isNotExpired = false;
-            }
-        }
-
-        return matchType && matchSector && matchState && isNotExpired;
-    }).sort((a, b) => {
-        // If specific state selected, prioritize State schemes over Central schemes
-        if (stateFilter !== 'All India') {
-            const aIsState = a.scheme_level !== 'central';
-            const bIsState = b.scheme_level !== 'central';
-
-            if (aIsState && !bIsState) return -1;
-            if (!aIsState && bIsState) return 1;
-        }
-        return 0;
-    });
-
-    const sectors = ['All', ...new Set(allSchemes.filter(s => {
-        if (s.validUntil) {
-            const today = new Date().toISOString().split('T')[0];
-            if (s.validUntil < today) return false;
-        }
-        return true;
-    }).map(s => s.sector).filter(Boolean))];
-
-    // List of Indian States & UTs
-    const states = [
-        "All India",
-        "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-        "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh",
-        "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Ladakh",
-        "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-        "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim",
-        "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand",
-        "West Bengal",
-        "Andaman and Nicobar Islands", "Chandigarh",
-        "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep", "Puducherry"
+    // Smart Categories (Chips)
+    const categories = [
+        { id: 'All', label: 'All Schemes' },
+        { id: 'Central', label: 'Central Govt' },
+        { id: 'State', label: 'State Govt' },
+        { id: 'Farmers', label: 'Farmers (Kisan)' },
+        { id: 'Women', label: 'Women (Nari)' },
+        { id: 'Students', label: 'Students' },
+        { id: 'Health', label: 'Health' },
+        { id: 'Business', label: 'Business & Loans' }
     ];
 
-    // Pagination Logic
-    const totalSchemes = filteredSchemes.length;
-    let displayedSchemes = [];
-    const totalPages = Math.ceil(totalSchemes / SCHEMES_PER_PAGE);
+    // States List (Simplified)
+    const states = [
+        "All India", "Uttar Pradesh", "Bihar", "Madhya Pradesh", "Rajasthan",
+        "Maharashtra", "Gujarat", "Karnataka", "Tamil Nadu", "West Bengal",
+        "Delhi", "Haryana", "Punjab"
+    ];
 
-    if (viewMode === 'initial') {
-        displayedSchemes = filteredSchemes.slice(0, 9);
-    } else {
-        const startIndex = (currentPage - 1) * SCHEMES_PER_PAGE;
-        displayedSchemes = filteredSchemes.slice(startIndex, startIndex + SCHEMES_PER_PAGE);
-    }
+    // Filtering Logic
+    const filteredSchemes = allSchemes.filter(scheme => {
+        // 1. Text Search
+        const matchesSearch = scheme.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            scheme.sector?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const handleViewAll = () => {
-        setViewMode('all');
-        setCurrentPage(1);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+        // 2. Category Filter
+        let matchesCategory = true;
+        if (selectedCategory !== 'All') {
+            if (selectedCategory === 'Central') matchesCategory = scheme.type === 'Central';
+            else if (selectedCategory === 'State') matchesCategory = scheme.type === 'State';
+            else {
+                // Case-insensitive check
+                const sectorMatch = scheme.sector?.toLowerCase() === selectedCategory.toLowerCase();
+                const tagMatch = scheme.tags?.some(tag => tag.toLowerCase() === selectedCategory.toLowerCase());
+                matchesCategory = sectorMatch || tagMatch;
+            }
+        }
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+        // 3. State Filter
+        let matchesState = true;
+        if (selectedState !== 'All India') {
+            matchesState = scheme.type === 'Central' || scheme.state_name === selectedState;
+        }
 
-    // Reset view to initial if filters change
-    React.useEffect(() => {
-        setViewMode('initial');
-        setCurrentPage(1);
-    }, [typeFilter, sectorFilter, stateFilter]);
+        return matchesSearch && matchesCategory && matchesState;
+    });
 
     return (
-        <>
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
             <Helmet>
-                <title>Government Schemes - Central & State | MySmartBharat</title>
-                <meta name="description" content="Latest Government Schemes 2025. PM Kisan, Ayushman Bharat, and state schemes explained simply." />
+                <title>Sarkari Yojana Hub | MySmartBharat</title>
+                <meta name="description" content="Explore the latest government schemes for Farmers, Women, Students, and Business. Filter by state and category." />
             </Helmet>
 
-            <div className="container section">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div className="max-w-7xl mx-auto px-6 py-10">
+
+                {/* 1. Page Header */}
+                <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-10">
                     <div>
-                        <h1>{t('schemes.title')}</h1>
-                        <p style={{ color: 'var(--text-grey)' }}>{t('schemes.subtitle')}</p>
+                        <span className="text-secondary font-bold tracking-wider text-sm uppercase mb-2 block">
+                            Citizen Welfare Portal
+                        </span>
+                        <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-white leading-tight">
+                            Sarkari <span className="text-primary">Yojana Hub</span>
+                        </h1>
+                        <p className="mt-4 text-slate-600 dark:text-slate-400 text-lg max-w-2xl">
+                            Find the right government schemes for you. Filter by category, state, or search directly.
+                        </p>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                    {/* Dedicated Search Bar */}
+                    <div className="w-full md:w-96 relative group">
+                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                            <Search className="text-slate-400 group-focus-within:text-secondary transition-colors" size={20} />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search schemes (e.g. Pension, Awas)..."
+                            className="w-full pl-10 pr-4 py-3 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-secondary/50 focus:border-secondary outline-none transition-all shadow-sm group-hover:shadow-md"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </div>
 
-                        {/* State Filter */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>State:</span>
-                            <select
-                                value={stateFilter}
-                                onChange={(e) => setStateFilter(e.target.value)}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    borderRadius: 'var(--radius-md)',
-                                    border: '1px solid var(--border)',
-                                    outline: 'none',
-                                    cursor: 'pointer',
-                                    fontWeight: 600,
-                                    color: 'var(--primary)',
-                                    maxWidth: '150px'
-                                }}
-                            >
-                                {states.map(st => (
-                                    <option key={st} value={st}>{st}</option>
-                                ))}
-                            </select>
+                {/* 2. Smart Filters */}
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 mb-8 sticky top-24 z-30 backdrop-blur-md bg-opacity-90 dark:bg-opacity-90">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+
+                        {/* Horizontal Chips */}
+                        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+                            <Filter size={20} className="text-slate-400 mr-2 flex-shrink-0" />
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat.id)}
+                                    className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${selectedCategory === cat.id
+                                        ? 'bg-primary text-white shadow-md shadow-blue-200 dark:shadow-none'
+                                        : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                        }`}
+                                >
+                                    {cat.label}
+                                </button>
+                            ))}
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{t('schemes.type_label')}:</span>
+                        {/* State Selector */}
+                        <div className="relative w-full md:w-64 flex-shrink-0">
+                            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                                <MapPin size={18} className="text-slate-500" />
+                            </div>
                             <select
-                                value={typeFilter}
-                                onChange={(e) => setTypeFilter(e.target.value)}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    borderRadius: 'var(--radius-md)',
-                                    border: '1px solid var(--border)',
-                                    outline: 'none',
-                                    cursor: 'pointer'
-                                }}
+                                value={selectedState}
+                                onChange={(e) => setSelectedState(e.target.value)}
+                                className="w-full pl-10 pr-8 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium appearance-none cursor-pointer hover:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
                             >
-                                <option value="All">{t('schemes.filter_all_types')}</option>
-                                <option value="Central">{t('schemes.filter_central')}</option>
-                                <option value="State">{t('schemes.filter_state')}</option>
+                                {states.map(st => <option key={st} value={st}>{st}</option>)}
                             </select>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{t('schemes.sector_label')}:</span>
-                            <select
-                                value={sectorFilter}
-                                onChange={(e) => setSectorFilter(e.target.value)}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    borderRadius: 'var(--radius-md)',
-                                    border: '1px solid var(--border)',
-                                    outline: 'none',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                {sectors.map(sec => (
-                                    <option key={sec} value={sec}>{sec === 'All' ? t('schemes.filter_all_sectors') : sec}</option>
-                                ))}
-                            </select>
+                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                <ChevronDown size={16} className="text-slate-500" />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {displayedSchemes.length > 0 ? (
-                    <>
-                        {stateFilter !== 'All India' && (
-                            <div style={{ marginBottom: '1.5rem', padding: '0.8rem', background: '#eeffe6', borderRadius: '8px', border: '1px solid #c3e6cb', color: '#155724' }}>
-                                Showing schemes for <strong>{stateFilter}</strong> (includes all Central schemes).
-                            </div>
-                        )}
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                            gap: '2rem',
-                            marginBottom: '2rem'
-                        }}>
-                            {displayedSchemes.map(scheme => (
-                                <SchemeCard key={scheme.id} scheme={scheme} />
-                            ))}
-                        </div>
+                {/* 3. Scheme Cards Grid */}
+                {loading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+                        {[1, 2, 3, 4, 5, 6].map(i => (
+                            <div key={i} className="h-64 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+                        ))}
+                    </div>
+                ) : filteredSchemes.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {filteredSchemes.map(scheme => (
+                            <div
+                                key={scheme.id}
+                                className="group relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                            >
+                                {/* Category Badge */}
+                                <div className="absolute top-4 right-4 bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 text-xs font-bold px-3 py-1 rounded-full border border-blue-100 dark:border-blue-800">
+                                    {scheme.sector || 'General'}
+                                </div>
 
-                        {/* Navigation / Pagination Controls */}
-                        {viewMode === 'initial' && totalSchemes > 9 && (
-                            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                                <button
-                                    onClick={handleViewAll}
-                                    className="btn btn-primary"
-                                    style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}
+                                {/* Content */}
+                                <div className="mb-4">
+                                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase mb-3 ${scheme.type === 'Central' ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600'
+                                        }`}>
+                                        {scheme.type} Govt
+                                    </span>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-primary transition-colors">
+                                        {scheme.title}
+                                    </h3>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-2">
+                                        {scheme.summary}
+                                    </p>
+                                </div>
+
+                                {/* Highlights */}
+                                <div className="space-y-2 mb-6">
+                                    {scheme.benefits && (
+                                        <div className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
+                                            <CheckCircle size={16} className="text-green-500 mt-0.5 shrink-0" />
+                                            <span>{scheme.benefits.substring(0, 50)}...</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Action */}
+                                <Link
+                                    to={`/schemes/${scheme.slug}`}
+                                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold group-hover:bg-primary group-hover:text-white transition-all"
                                 >
-                                    View All Schemes ({totalSchemes})
-                                </button>
-                                <p style={{ fontSize: '0.85rem', color: '#64748B', marginTop: '0.5rem' }}>
-                                    {t('schemes.showing_active', 'Showing active schemes only')}
-                                </p>
+                                    View Details <ArrowRight size={18} />
+                                </Link>
                             </div>
-                        )}
-
-                        {viewMode === 'all' && totalPages > 1 && (
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '3rem' }}>
-                                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                                    <button
-                                        key={page}
-                                        onClick={() => handlePageChange(page)}
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            borderRadius: '4px',
-                                            border: '1px solid var(--border)',
-                                            background: currentPage === page ? 'var(--primary)' : 'white',
-                                            color: currentPage === page ? 'white' : 'var(--text-main)',
-                                            cursor: 'pointer',
-                                            fontWeight: 600
-                                        }}
-                                    >
-                                        {page}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </>
+                        ))}
+                    </div>
                 ) : (
-                    <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-grey)' }}>
-                        <h3>No active schemes found matching your filters.</h3>
-                        <p>Try changing the filters or check back later.</p>
+                    /* 4. Empty State */
+                    <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+                        <div className="mx-auto w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                            <Search size={32} className="text-slate-400" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2">No Schemes Found</h3>
+                        <p className="text-slate-500 max-w-md mx-auto mb-6">
+                            We couldn't find any schemes matching "<strong>{searchQuery || selectedCategory}</strong>".
+                            Try changing the filters or searching for something else.
+                        </p>
+                        <button
+                            onClick={() => { setSearchQuery(''); setSelectedCategory('All'); setSelectedState('All India'); }}
+                            className="text-primary font-semibold hover:underline"
+                        >
+                            Clear all filters
+                        </button>
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 };
 
