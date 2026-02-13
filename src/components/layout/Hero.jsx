@@ -138,7 +138,7 @@ const Hero = () => {
             </div>
 
             <div className="container mx-auto px-4 relative z-10 text-center">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mb-6 tracking-tight leading-tight drop-shadow-lg">
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold font-heading text-white mb-6 tracking-tight leading-tight drop-shadow-lg">
                     {t('home.hero_title') || 'Dhoondiye Sarkari Yojana'} <br className="hidden md:block" />
                     <span className="text-secondary bg-clip-text">
                         {t('home.hero_subtitle_suffix') || 'ya Calculator...'}

@@ -218,8 +218,8 @@ const Navbar = () => {
 
                 <div className="p-4 flex flex-col gap-2 overflow-y-auto h-[calc(100%-80px)]">
                     {/* Mobile Links */}
-                    <div className="flex flex-col gap-1">
-                        <Link to="/" onClick={closeMenu} className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-200">
+                    <div className="flex flex-col gap-2">
+                        <Link to="/" onClick={closeMenu} className="p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-lg text-slate-700 dark:text-slate-200">
                             Home
                         </Link>
 
@@ -227,19 +227,19 @@ const Navbar = () => {
                         <div className="rounded-xl overflow-hidden">
                             <button
                                 onClick={() => setActiveDropdown(activeDropdown === 'schemes' ? null : 'schemes')}
-                                className="w-full flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-200"
+                                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-lg text-slate-700 dark:text-slate-200"
                             >
-                                Schemes <ChevronDown size={16} className={`transition-transform ${activeDropdown === 'schemes' ? 'rotate-180' : ''}`} />
+                                Schemes <ChevronDown size={20} className={`transition-transform ${activeDropdown === 'schemes' ? 'rotate-180' : ''}`} />
                             </button>
                             {activeDropdown === 'schemes' && (
-                                <div className="bg-slate-50 dark:bg-slate-800/50 flex flex-col p-2 space-y-1">
+                                <div className="bg-slate-50 dark:bg-slate-800/50 flex flex-col p-2 space-y-2">
                                     {schemesCategories.map((item, idx) => (
-                                        <Link key={idx} to={item.path} onClick={closeMenu} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white dark:hover:bg-slate-800 text-sm font-medium text-slate-600 dark:text-slate-300">
-                                            <item.icon size={16} className="text-primary" /> {item.name}
+                                        <Link key={idx} to={item.path} onClick={closeMenu} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white dark:hover:bg-slate-800 text-base font-medium text-slate-600 dark:text-slate-300">
+                                            <item.icon size={20} className="text-primary" /> {item.name}
                                         </Link>
                                     ))}
-                                    <Link to="/schemes" onClick={closeMenu} className="flex items-center gap-2 p-2 text-sm font-bold text-primary pl-9">
-                                        View All <ArrowRight size={14} />
+                                    <Link to="/schemes" onClick={closeMenu} className="flex items-center gap-2 p-3 text-base font-bold text-primary pl-10">
+                                        View All <ArrowRight size={16} />
                                     </Link>
                                 </div>
                             )}
@@ -249,25 +249,25 @@ const Navbar = () => {
                         <div className="rounded-xl overflow-hidden">
                             <button
                                 onClick={() => setActiveDropdown(activeDropdown === 'tools' ? null : 'tools')}
-                                className="w-full flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-200"
+                                className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-lg text-slate-700 dark:text-slate-200"
                             >
-                                Calculators <ChevronDown size={16} className={`transition-transform ${activeDropdown === 'tools' ? 'rotate-180' : ''}`} />
+                                Calculators <ChevronDown size={20} className={`transition-transform ${activeDropdown === 'tools' ? 'rotate-180' : ''}`} />
                             </button>
                             {activeDropdown === 'tools' && (
-                                <div className="bg-slate-50 dark:bg-slate-800/50 flex flex-col p-2 space-y-1">
+                                <div className="bg-slate-50 dark:bg-slate-800/50 flex flex-col p-2 space-y-2">
                                     {toolsCategories.map((item, idx) => (
-                                        <Link key={idx} to={item.path} onClick={closeMenu} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white dark:hover:bg-slate-800 text-sm font-medium text-slate-600 dark:text-slate-300">
-                                            <item.icon size={16} className="text-secondary" /> {item.name}
+                                        <Link key={idx} to={item.path} onClick={closeMenu} className="flex items-center gap-4 p-3 rounded-lg hover:bg-white dark:hover:bg-slate-800 text-base font-medium text-slate-600 dark:text-slate-300">
+                                            <item.icon size={20} className="text-secondary" /> {item.name}
                                         </Link>
                                     ))}
                                 </div>
                             )}
                         </div>
 
-                        <Link to="/news" onClick={closeMenu} className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-200">
+                        <Link to="/news" onClick={closeMenu} className="p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-lg text-slate-700 dark:text-slate-200">
                             News & Updates
                         </Link>
-                        <Link to="/career" onClick={closeMenu} className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-200">
+                        <Link to="/career" onClick={closeMenu} className="p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-lg text-slate-700 dark:text-slate-200">
                             Jobs & Career
                         </Link>
                     </div>

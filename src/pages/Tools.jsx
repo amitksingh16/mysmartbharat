@@ -216,7 +216,7 @@ const Tools = () => {
                         Smart <span className="text-primary">Financial Tools</span>
                     </h1>
 
-                    <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide justify-center md:justify-start">
+                    <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide flex-nowrap justify-start px-1">
                         {toolsList.map(tool => {
                             const isActive = activeTool === tool.id;
                             const ToolIcon = tool.icon;
@@ -224,13 +224,13 @@ const Tools = () => {
                                 <Link
                                     key={tool.id}
                                     to={tool.id === 'emi' ? '/tools' : `/tools/${tool.id}`}
-                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-all shrink-0 border ${isActive
+                                    className={`flex items-center gap-2 px-6 py-3.5 rounded-full transition-all shrink-0 border whitespace-nowrap ${isActive
                                         ? 'bg-slate-900 text-white shadow-lg border-slate-900 scale-105'
                                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-300'
                                         }`}
                                 >
-                                    <ToolIcon size={18} className={isActive ? 'text-secondary' : 'text-slate-400'} />
-                                    <span className="font-semibold">{tool.title}</span>
+                                    <ToolIcon size={20} className={isActive ? 'text-secondary' : 'text-slate-400'} />
+                                    <span className="font-bold text-sm md:text-base">{tool.title}</span>
                                 </Link>
                             );
                         })}
@@ -302,7 +302,7 @@ const Tools = () => {
                                 <>
                                     {/* EMI: Loan Type Selector */}
                                     {activeTool === 'emi' && (
-                                        <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl mb-6">
+                                        <div className="grid grid-cols-2 xs:grid-cols-2 md:grid-cols-3 gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-2xl mb-8">
                                             {[
                                                 { id: 'home', label: 'Home Loan', icon: Home },
                                                 { id: 'personal', label: 'Personal', icon: User },
@@ -311,13 +311,13 @@ const Tools = () => {
                                                 <button
                                                     key={type.id}
                                                     onClick={() => setEmiType(type.id)}
-                                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${emiType === type.id
-                                                        ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
-                                                        : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'
-                                                        }`}
+                                                    className={`col-span-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${emiType === type.id
+                                                        ? 'bg-white dark:bg-slate-700 text-primary shadow-sm ring-1 ring-black/5'
+                                                        : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50'
+                                                        } ${type.id === 'car' ? 'col-span-2 md:col-span-1' : ''}`}
                                                 >
-                                                    <type.icon size={16} />
-                                                    <span className="hidden sm:inline">{type.label}</span>
+                                                    <type.icon size={18} />
+                                                    <span>{type.label}</span>
                                                 </button>
                                             ))}
                                         </div>
